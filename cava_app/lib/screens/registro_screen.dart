@@ -94,7 +94,7 @@ class _RegistroScreenState extends State<RegistroScreen> {
             _campo(_nombres, 'Nombres', 'Tu nombre', validator: _requerido),
             _campo(_apellidos, 'Apellidos', 'Tus apellidos', validator: _requerido),
             DropdownButtonFormField<int>(
-              value: _idTipoDocumento,
+              initialValue: _idTipoDocumento,
               decoration: const InputDecoration(labelText: 'Tipo de documento'),
               items: const [
                 DropdownMenuItem(value: 4, child: Text('Cédula de ciudadanía')),

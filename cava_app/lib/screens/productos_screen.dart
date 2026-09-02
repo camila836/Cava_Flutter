@@ -73,7 +73,7 @@ class _ProductosScreenState extends State<ProductosScreen> {
             ),
             const SizedBox(height: 11),
             DropdownButtonFormField<String>(
-              value: _orden,
+              initialValue: _orden,
               decoration: const InputDecoration(prefixIcon: Icon(Icons.sort), labelText: 'Ordenar por'),
               items: const [
                 DropdownMenuItem(value: 'relevancia', child: Text('Selección CAVA')),
