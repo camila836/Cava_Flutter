@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../core/cava_theme.dart';
+import '../core/cava_layout.dart';
 import '../core/session.dart';
 import '../models/producto.dart';
 import 'producto_card.dart';
@@ -13,6 +14,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _scrollController = ScrollController();
+  final _origenKey = GlobalKey();
   bool _cargando = true;
   String? _error;
   String _lema = '';
@@ -24,51 +27,86 @@ class _HomeScreenState extends State<HomeScreen> {
     _cargar();
   }
 
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _verOrigen() {
+    final target = _origenKey.currentContext;
+    if (target != null) {
+      Scrollable.ensureVisible(target,
+          duration: const Duration(milliseconds: 350));
+    }
+  }
+
+  int _requestId = 0;
   Future<void> _cargar() async {
-    setState(() => _cargando = true);
-    final res = await context.read<Session>().api.getHome();
-    if (!mounted) return;
-    if (res.ok) {
+    final requestId = ++_requestId;
+    setState(() {
+      _cargando = true;
+      _error = null;
+    });
+    try {
+      final res = await context.read<Session>().api.getHome();
+      if (!mounted || requestId != _requestId) return;
+      if (!res.ok) {
+        setState(() => _error = res.mensaje ?? 'No se pudo cargar el inicio.');
+        return;
+      }
       final identidad = res.data?['identidad'] as Map<String, dynamic>?;
+      final lema = identidad?['lema'] as String? ?? '';
+      final destacados = (res.data?['productosDestacados'] as List? ?? [])
+          .map((e) => Producto.fromJson(e as Map<String, dynamic>))
+          .toList();
       setState(() {
-        _lema = identidad?['lema'] as String? ?? '';
-        _destacados = (res.data?['productosDestacados'] as List? ?? [])
-            .map((e) => Producto.fromJson(e as Map<String, dynamic>))
-            .toList();
-        _cargando = false;
-        _error = null;
+        _lema = lema;
+        _destacados = destacados;
       });
-    } else {
-      setState(() {
-        _error = res.mensaje ?? 'No se pudo cargar el inicio.';
-        _cargando = false;
-      });
+    } on TypeError {
+      if (mounted && requestId == _requestId) {
+        setState(
+            () => _error = 'El inicio devolvió datos con un formato inválido.');
+      }
+    } finally {
+      if (mounted && requestId == _requestId) setState(() => _cargando = false);
     }
   }
 
   @override
   Widget build(BuildContext context) => RefreshIndicator(
         onRefresh: _cargar,
-        child: ListView(children: [
-          _Hero(lema: _lema, onExplore: widget.onExplore),
-          const _FranjaFeatures(),
-          _SeccionDestacados(
-            cargando: _cargando,
-            error: _error,
-            destacados: _destacados,
-            onReintentar: _cargar,
-            onVerTodos: widget.onExplore,
-          ),
-          const _SeccionOrigen(),
-          const _SeccionAnchetas(),
-          const _SeccionContacto(),
-        ]),
+        child: SingleChildScrollView(
+            controller: _scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _Hero(
+                      lema: _lema,
+                      onExplore: widget.onExplore,
+                      onOrigin: _verOrigen),
+                  const _FranjaFeatures(),
+                  _SeccionDestacados(
+                    cargando: _cargando,
+                    error: _error,
+                    destacados: _destacados,
+                    onReintentar: _cargar,
+                    onVerTodos: widget.onExplore,
+                  ),
+                  _SeccionOrigen(key: _origenKey),
+                  const _SeccionAnchetas(),
+                  const _SeccionContacto(),
+                ])),
       );
 }
 
 /// Hero con imagen de fondo de cacao/chocolate, degradado oscuro y CTA.
 class _Hero extends StatelessWidget {
-  const _Hero({required this.lema, required this.onExplore});
+  const _Hero(
+      {required this.lema, required this.onExplore, required this.onOrigin});
+  final VoidCallback onOrigin;
   final String lema;
   final VoidCallback onExplore;
 
@@ -77,17 +115,19 @@ class _Hero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        height: 500,
+        constraints: const BoxConstraints(minHeight: 500),
         clipBehavior: Clip.hardEdge,
         decoration: const BoxDecoration(),
-        child: Stack(fit: StackFit.expand, children: [
-          Image.network(
+        child: Stack(children: [
+          Positioned.fill(
+              child: Image.network(
             _fallbackImg,
             fit: BoxFit.cover,
             errorBuilder: (_, __, ___) =>
                 const ColoredBox(color: CavaColors.cocoa),
-          ),
-          Container(
+          )),
+          Positioned.fill(
+              child: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
@@ -99,7 +139,7 @@ class _Hero extends StatelessWidget {
                 ],
               ),
             ),
-          ),
+          )),
           Padding(
             padding: const EdgeInsets.fromLTRB(22, 30, 22, 28),
             child:
@@ -118,30 +158,25 @@ class _Hero extends StatelessWidget {
                 'Del cacao colombiano nace una experiencia artesanal\nhecha para compartir.',
                 style: TextStyle(color: Colors.white70, height: 1.4),
               ),
-              const Spacer(),
-              Row(children: [
-                Expanded(
-                  child: FilledButton(
-                    style: FilledButton.styleFrom(
-                        backgroundColor: CavaColors.forest,
-                        foregroundColor: Colors.white),
-                    onPressed: onExplore,
-                    child: const Text('VER PRODUCTOS'),
-                  ),
+              const SizedBox(height: 36),
+              CavaColumns(minWidth: 220, maxColumns: 2, children: [
+                FilledButton(
+                  style: FilledButton.styleFrom(
+                      backgroundColor: CavaColors.forest,
+                      foregroundColor: Colors.white),
+                  onPressed: onExplore,
+                  child: const Text('VER PRODUCTOS'),
                 ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(52),
-                      foregroundColor: Colors.white,
-                      side: const BorderSide(color: Colors.white70),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                    ),
-                    onPressed: () {},
-                    child: const Text('NUESTRO ORIGEN'),
+                OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(52),
+                    foregroundColor: Colors.white,
+                    side: const BorderSide(color: Colors.white70),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
                   ),
+                  onPressed: onOrigin,
+                  child: const Text('NUESTRO ORIGEN'),
                 ),
               ]),
             ]),
@@ -225,23 +260,18 @@ class _SeccionDestacados extends StatelessWidget {
             const _MessageCard(
                 message: 'Pronto encontrarás aquí nuestra selección destacada.')
           else
-            SizedBox(
-              height: 268,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: destacados.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 12),
-                itemBuilder: (_, i) => ProductoDestacadoCard(
-                    producto: destacados[i], onVerProducto: onVerTodos),
-              ),
-            ),
+            CavaColumns(children: [
+              for (final producto in destacados)
+                ProductoDestacadoCard(
+                    producto: producto, onVerProducto: onVerTodos),
+            ]),
         ]),
       );
 }
 
 /// Sección "Del origen al chocolate, con respeto y propósito".
 class _SeccionOrigen extends StatelessWidget {
-  const _SeccionOrigen();
+  const _SeccionOrigen({super.key});
 
   static const _img =
       'https://images.unsplash.com/photo-1511381939415-e44015466834?w=800&q=80';
@@ -249,7 +279,7 @@ class _SeccionOrigen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.fromLTRB(18, 30, 18, 10),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        child: CavaColumns(minWidth: 360, maxColumns: 2, children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: AspectRatio(
@@ -260,24 +290,25 @@ class _SeccionOrigen extends StatelessWidget {
                       const ColoredBox(color: CavaColors.forest)),
             ),
           ),
-          const SizedBox(height: 18),
-          const CavaEyebrow('Nuestro origen', color: CavaColors.wine),
-          const SizedBox(height: 8),
-          const CavaTituloAcento(
-              'Del origen al chocolate, con respeto y', 'propósito'),
-          const SizedBox(height: 10),
-          const Text(
-            'Trabajamos directamente con familias cacaoteras en distintas regiones de Colombia para honrar el cacao, su tierra y quienes lo cultivan.',
-            style: TextStyle(color: CavaColors.muted, height: 1.5),
-          ),
-          const SizedBox(height: 16),
-          OutlinedButton(
-            style: OutlinedButton.styleFrom(
-                foregroundColor: CavaColors.ink,
-                side: const BorderSide(color: CavaColors.ink)),
-            onPressed: () {},
-            child: const Text('CONOCE NUESTRA HISTORIA'),
-          ),
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const CavaEyebrow('Nuestro origen', color: CavaColors.wine),
+            const SizedBox(height: 8),
+            const CavaTituloAcento(
+                'Del origen al chocolate, con respeto y', 'propósito'),
+            const SizedBox(height: 10),
+            const Text(
+              'Trabajamos directamente con familias cacaoteras en distintas regiones de Colombia para honrar el cacao, su tierra y quienes lo cultivan.',
+              style: TextStyle(color: CavaColors.muted, height: 1.5),
+            ),
+            const SizedBox(height: 16),
+            OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                  foregroundColor: CavaColors.ink,
+                  side: const BorderSide(color: CavaColors.ink)),
+              onPressed: null,
+              child: const Text('CONOCE NUESTRA HISTORIA'),
+            ),
+          ]),
         ]),
       );
 }
@@ -294,14 +325,11 @@ class _SeccionAnchetas extends StatelessWidget {
           CavaTituloAcento('Regala momentos que saben a', 'verdad',
               textAlign: TextAlign.center),
           SizedBox(height: 18),
-          Row(children: [
-            Expanded(
-                child: _TarjetaAncheta(
-                    titulo: 'Ancheta sencilla', precio: '\$ 85.000 COP')),
-            SizedBox(width: 12),
-            Expanded(
-                child: _TarjetaAncheta(
-                    titulo: 'Ancheta especial', precio: '\$ 150.000 COP')),
+          CavaColumns(maxColumns: 2, children: [
+            _TarjetaAncheta(
+                titulo: 'Ancheta sencilla', precio: '\$ 85.000 COP'),
+            _TarjetaAncheta(
+                titulo: 'Ancheta especial', precio: '\$ 150.000 COP'),
           ]),
         ]),
       );
@@ -372,7 +400,9 @@ class _FilaContacto extends StatelessWidget {
         child: Row(children: [
           Icon(icon, color: Colors.white70, size: 16),
           const SizedBox(width: 10),
-          Text(texto, style: const TextStyle(color: Colors.white70)),
+          Expanded(
+              child:
+                  Text(texto, style: const TextStyle(color: Colors.white70))),
         ]),
       );
 }

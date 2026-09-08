@@ -36,39 +36,41 @@ class ProductoCard extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleLarge),
             if (producto.descripcion.isNotEmpty) ...[
               const SizedBox(height: 7),
-              Text(producto.descripcion,
-                  maxLines: 2, overflow: TextOverflow.ellipsis),
+              Text(producto.descripcion, softWrap: true),
             ],
             const SizedBox(height: 14),
-            Row(children: [
-              Expanded(
-                  child: Text(precio,
+            Wrap(
+                spacing: 12,
+                runSpacing: 8,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  Text(precio,
                       style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
-                          color: CavaColors.cocoa))),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                decoration: BoxDecoration(
-                  color: producto.stock > 0
-                      ? const Color(0xFFE7F1E7)
-                      : const Color(0xFFF7E5E1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  producto.stock > 0
-                      ? '${producto.stock} disponibles'
-                      : 'Agotado',
-                  style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
+                          color: CavaColors.cocoa)),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    decoration: BoxDecoration(
                       color: producto.stock > 0
-                          ? Colors.green.shade800
-                          : Colors.red.shade800),
-                ),
-              ),
-            ]),
+                          ? const Color(0xFFE7F1E7)
+                          : const Color(0xFFF7E5E1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      producto.stock > 0
+                          ? '${producto.stock} disponibles'
+                          : 'Agotado',
+                      style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: producto.stock > 0
+                              ? Colors.green.shade800
+                              : Colors.red.shade800),
+                    ),
+                  ),
+                ]),
           ]),
         ),
       ]),
@@ -91,7 +93,6 @@ class ProductoDestacadoCard extends StatelessWidget {
     final precio =
         '\$${base.replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (_) => '.')} COP';
     return Container(
-      width: 168,
       decoration: BoxDecoration(
         color: CavaColors.paper,
         borderRadius: BorderRadius.circular(4),
@@ -111,8 +112,6 @@ class ProductoDestacadoCard extends StatelessWidget {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(producto.nombre,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 13,

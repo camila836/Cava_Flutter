@@ -126,6 +126,7 @@ class CavaTituloAcento extends StatelessWidget {
   final TextAlign textAlign;
   @override
   Widget build(BuildContext context) => RichText(
+        textScaler: MediaQuery.textScalerOf(context),
         textAlign: textAlign,
         text: TextSpan(
           style: TextStyle(

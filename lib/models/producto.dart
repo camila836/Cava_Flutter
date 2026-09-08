@@ -33,6 +33,21 @@ class Producto {
       );
 
   /// URL absoluta de la imagen, o null si no hay imagen de referencia.
-  String? get imagenUrl =>
-      imagen.isEmpty ? null : '${ApiClient.imagesOrigin}/$imagen';
+  String? get imagenUrl {
+    final path = Uri.tryParse(imagen);
+    if (imagen.isEmpty || path == null) return null;
+    if (path.hasScheme) {
+      return ['http', 'https'].contains(path.scheme) && path.host.isNotEmpty
+          ? path.toString()
+          : null;
+    }
+    final base = Uri.tryParse(ApiClient.imagesOrigin);
+    if (base == null ||
+        !['http', 'https'].contains(base.scheme) ||
+        base.host.isEmpty) {
+      return null;
+    }
+    final root = ApiClient.imagesOrigin.replaceFirst(RegExp(r'/+$'), '');
+    return Uri.parse('$root/').resolve(imagen).toString();
+  }
 }

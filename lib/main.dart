@@ -48,9 +48,15 @@ class _RaizAppState extends State<RaizApp> {
     ];
 
     return Scaffold(
-      appBar:
-          const CavaAppBar(), // contadorCarrito se conecta cuando exista el Carrito
-      body: IndexedStack(index: _indice, children: paginas),
+      body: Column(children: [
+        const CavaAppBar(),
+        Expanded(
+            child: Center(
+                child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1200),
+          child: paginas[_indice],
+        ))),
+      ]),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _indice,
         onDestinationSelected: (i) => setState(() => _indice = i),

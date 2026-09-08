@@ -2,7 +2,13 @@ import 'package:flutter/foundation.dart';
 import 'api_client.dart';
 
 class Session extends ChangeNotifier {
-  final ApiClient api = ApiClient();
+  Session({ApiClient? api}) : api = api ?? ApiClient();
+  final ApiClient api;
+  @override
+  void dispose() {
+    api.close();
+    super.dispose();
+  }
 
   Map<String, dynamic>? usuario;
   bool cargando = false;

@@ -12,8 +12,7 @@ class CavaAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onCarritoTap;
 
   @override
-  Size get preferredSize => const Size.fromHeight(78);
-
+  Size get preferredSize => const Size.fromHeight(90);
   @override
   Widget build(BuildContext context) {
     return SafeArea(
