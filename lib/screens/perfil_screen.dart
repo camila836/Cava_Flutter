@@ -17,7 +17,9 @@ class PerfilScreen extends StatelessWidget {
         children: [
           const CircleAvatar(radius: 40, child: Icon(Icons.person, size: 40)),
           const SizedBox(height: 16),
-          Text(usuario?['nombre'] ?? '', textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleLarge),
+          Text(usuario?['nombre'] ?? '',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleLarge),
           Text(usuario?['correo'] ?? '', textAlign: TextAlign.center),
           const SizedBox(height: 24),
           OutlinedButton.icon(

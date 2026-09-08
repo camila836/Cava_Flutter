@@ -84,7 +84,8 @@ class _Hero extends StatelessWidget {
           Image.network(
             _fallbackImg,
             fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) => const ColoredBox(color: CavaColors.cocoa),
+            errorBuilder: (_, __, ___) =>
+                const ColoredBox(color: CavaColors.cocoa),
           ),
           Container(
             decoration: BoxDecoration(
@@ -101,11 +102,15 @@ class _Hero extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(22, 30, 22, 28),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const CavaEyebrow('Chocolate artesanal colombiano', color: Color(0xFFE2BF75)),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const CavaEyebrow('Chocolate artesanal colombiano',
+                  color: Color(0xFFE2BF75)),
               const SizedBox(height: 30),
               Text(
-                lema.isNotEmpty ? lema : 'Comer chocolate es una\ninversión en tu felicidad.',
+                lema.isNotEmpty
+                    ? lema
+                    : 'Comer chocolate es una\ninversión en tu felicidad.',
                 style: Theme.of(context).textTheme.displaySmall,
               ),
               const SizedBox(height: 12),
@@ -117,7 +122,9 @@ class _Hero extends StatelessWidget {
               Row(children: [
                 Expanded(
                   child: FilledButton(
-                    style: FilledButton.styleFrom(backgroundColor: CavaColors.forest, foregroundColor: Colors.white),
+                    style: FilledButton.styleFrom(
+                        backgroundColor: CavaColors.forest,
+                        foregroundColor: Colors.white),
                     onPressed: onExplore,
                     child: const Text('VER PRODUCTOS'),
                   ),
@@ -129,7 +136,8 @@ class _Hero extends StatelessWidget {
                       minimumSize: const Size.fromHeight(52),
                       foregroundColor: Colors.white,
                       side: const BorderSide(color: Colors.white70),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
                     ),
                     onPressed: () {},
                     child: const Text('NUESTRO ORIGEN'),
@@ -163,7 +171,13 @@ class _FranjaFeatures extends StatelessWidget {
                 child: Column(children: [
                   Icon(icon, color: CavaColors.wine, size: 26),
                   const SizedBox(height: 8),
-                  Text(texto, textAlign: TextAlign.center, style: const TextStyle(fontSize: 11, color: CavaColors.ink, fontWeight: FontWeight.w600, height: 1.3)),
+                  Text(texto,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          fontSize: 11,
+                          color: CavaColors.ink,
+                          fontWeight: FontWeight.w600,
+                          height: 1.3)),
                 ]),
               ),
           ],
@@ -192,16 +206,24 @@ class _SeccionDestacados extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(18, 34, 18, 10),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(children: [
-            Expanded(child: CavaTituloAcento('Hechos para disfrutar', 'despacio')),
-            TextButton(onPressed: onVerTodos, child: const Text('Ver todos', style: TextStyle(color: CavaColors.wine, fontWeight: FontWeight.w700))),
+            const Expanded(
+                child: CavaTituloAcento('Hechos para disfrutar', 'despacio')),
+            TextButton(
+                onPressed: onVerTodos,
+                child: const Text('Ver todos',
+                    style: TextStyle(
+                        color: CavaColors.wine, fontWeight: FontWeight.w700))),
           ]),
           const SizedBox(height: 16),
           if (cargando)
-            const Padding(padding: EdgeInsets.symmetric(vertical: 30), child: Center(child: CircularProgressIndicator()))
+            const Padding(
+                padding: EdgeInsets.symmetric(vertical: 30),
+                child: Center(child: CircularProgressIndicator()))
           else if (error != null)
             _MessageCard(message: error!, onRetry: onReintentar)
           else if (destacados.isEmpty)
-            const _MessageCard(message: 'Pronto encontrarás aquí nuestra selección destacada.')
+            const _MessageCard(
+                message: 'Pronto encontrarás aquí nuestra selección destacada.')
           else
             SizedBox(
               height: 268,
@@ -209,7 +231,8 @@ class _SeccionDestacados extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 itemCount: destacados.length,
                 separatorBuilder: (_, __) => const SizedBox(width: 12),
-                itemBuilder: (_, i) => ProductoDestacadoCard(producto: destacados[i], onVerProducto: onVerTodos),
+                itemBuilder: (_, i) => ProductoDestacadoCard(
+                    producto: destacados[i], onVerProducto: onVerTodos),
               ),
             ),
         ]),
@@ -220,7 +243,8 @@ class _SeccionDestacados extends StatelessWidget {
 class _SeccionOrigen extends StatelessWidget {
   const _SeccionOrigen();
 
-  static const _img = 'https://images.unsplash.com/photo-1511381939415-e44015466834?w=800&q=80';
+  static const _img =
+      'https://images.unsplash.com/photo-1511381939415-e44015466834?w=800&q=80';
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -230,13 +254,17 @@ class _SeccionOrigen extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
             child: AspectRatio(
               aspectRatio: 16 / 10,
-              child: Image.network(_img, fit: BoxFit.cover, errorBuilder: (_, __, ___) => const ColoredBox(color: CavaColors.forest)),
+              child: Image.network(_img,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) =>
+                      const ColoredBox(color: CavaColors.forest)),
             ),
           ),
           const SizedBox(height: 18),
           const CavaEyebrow('Nuestro origen', color: CavaColors.wine),
           const SizedBox(height: 8),
-          CavaTituloAcento('Del origen al chocolate, con respeto y', 'propósito'),
+          const CavaTituloAcento(
+              'Del origen al chocolate, con respeto y', 'propósito'),
           const SizedBox(height: 10),
           const Text(
             'Trabajamos directamente con familias cacaoteras en distintas regiones de Colombia para honrar el cacao, su tierra y quienes lo cultivan.',
@@ -244,7 +272,9 @@ class _SeccionOrigen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           OutlinedButton(
-            style: OutlinedButton.styleFrom(foregroundColor: CavaColors.ink, side: const BorderSide(color: CavaColors.ink)),
+            style: OutlinedButton.styleFrom(
+                foregroundColor: CavaColors.ink,
+                side: const BorderSide(color: CavaColors.ink)),
             onPressed: () {},
             child: const Text('CONOCE NUESTRA HISTORIA'),
           ),
@@ -260,13 +290,18 @@ class _SeccionAnchetas extends StatelessWidget {
   Widget build(BuildContext context) => Container(
         color: CavaColors.blush.withValues(alpha: 0.5),
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 18),
-        child: Column(children: [
-          CavaTituloAcento('Regala momentos que saben a', 'verdad', textAlign: TextAlign.center),
-          const SizedBox(height: 18),
+        child: const Column(children: [
+          CavaTituloAcento('Regala momentos que saben a', 'verdad',
+              textAlign: TextAlign.center),
+          SizedBox(height: 18),
           Row(children: [
-            Expanded(child: _TarjetaAncheta(titulo: 'Ancheta sencilla', precio: '\$ 85.000 COP')),
-            const SizedBox(width: 12),
-            Expanded(child: _TarjetaAncheta(titulo: 'Ancheta especial', precio: '\$ 150.000 COP')),
+            Expanded(
+                child: _TarjetaAncheta(
+                    titulo: 'Ancheta sencilla', precio: '\$ 85.000 COP')),
+            SizedBox(width: 12),
+            Expanded(
+                child: _TarjetaAncheta(
+                    titulo: 'Ancheta especial', precio: '\$ 150.000 COP')),
           ]),
         ]),
       );
@@ -279,13 +314,19 @@ class _TarjetaAncheta extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(color: CavaColors.paper, borderRadius: BorderRadius.circular(4), border: Border.all(color: CavaColors.line)),
+        decoration: BoxDecoration(
+            color: CavaColors.paper,
+            borderRadius: BorderRadius.circular(4),
+            border: Border.all(color: CavaColors.line)),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Icon(Icons.card_giftcard_outlined, color: CavaColors.wine, size: 22),
+          const Icon(Icons.card_giftcard_outlined,
+              color: CavaColors.wine, size: 22),
           const SizedBox(height: 10),
           Text(titulo, style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 6),
-          Text(precio, style: const TextStyle(color: CavaColors.wine, fontWeight: FontWeight.w700)),
+          Text(precio,
+              style: const TextStyle(
+                  color: CavaColors.wine, fontWeight: FontWeight.w700)),
         ]),
       );
 }
@@ -300,13 +341,23 @@ class _SeccionContacto extends StatelessWidget {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           const CavaEyebrow('Hablemos', color: Color(0xFFE2BF75)),
           const SizedBox(height: 8),
-          Text('Estamos para ti', style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Colors.white)),
+          Text('Estamos para ti',
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineMedium
+                  ?.copyWith(color: Colors.white)),
           const SizedBox(height: 10),
-          const Text('¿Dudas, pedidos especiales o alianzas? Escríbenos y con gusto te ayudamos.', style: TextStyle(color: Colors.white70)),
+          const Text(
+              '¿Dudas, pedidos especiales o alianzas? Escríbenos y con gusto te ayudamos.',
+              style: TextStyle(color: Colors.white70)),
           const SizedBox(height: 16),
-          const _FilaContacto(icon: Icons.call_outlined, texto: '+57 321 123 4567'),
-          const _FilaContacto(icon: Icons.mail_outline, texto: 'hola@cavachocolate.com'),
-          const _FilaContacto(icon: Icons.schedule_outlined, texto: 'Lun a Vie: 8:00 a.m. - 5:00 p.m.'),
+          const _FilaContacto(
+              icon: Icons.call_outlined, texto: '+57 321 123 4567'),
+          const _FilaContacto(
+              icon: Icons.mail_outline, texto: 'hola@cavachocolate.com'),
+          const _FilaContacto(
+              icon: Icons.schedule_outlined,
+              texto: 'Lun a Vie: 8:00 a.m. - 5:00 p.m.'),
         ]),
       );
 }
@@ -336,7 +387,8 @@ class _MessageCard extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           child: Column(children: [
             Text(message, textAlign: TextAlign.center),
-            if (onRetry != null) TextButton(onPressed: onRetry, child: const Text('Reintentar')),
+            if (onRetry != null)
+              TextButton(onPressed: onRetry, child: const Text('Reintentar')),
           ]),
         ),
       );

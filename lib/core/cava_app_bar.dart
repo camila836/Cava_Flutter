@@ -26,18 +26,31 @@ class CavaAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: const Text(
             'CHOCOLATE ARTESANAL COLOMBIANO',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 9, letterSpacing: 1.6, color: CavaColors.muted, fontWeight: FontWeight.w600),
+            style: TextStyle(
+                fontSize: 9,
+                letterSpacing: 1.6,
+                color: CavaColors.muted,
+                fontWeight: FontWeight.w600),
           ),
         ),
         Container(
           color: CavaColors.cream,
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           child: Row(children: [
-            const SizedBox(width: 40), // balancea el ícono de carrito de la derecha
+            const SizedBox(
+                width: 40), // balancea el ícono de carrito de la derecha
             Expanded(
               child: Column(children: [
-                Text('CAVA', style: Theme.of(context).textTheme.titleLarge?.copyWith(letterSpacing: 3, fontSize: 22)),
-                const Text('Placer Absoluto', style: TextStyle(fontSize: 10, color: CavaColors.muted, letterSpacing: 1)),
+                Text('CAVA',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(letterSpacing: 3, fontSize: 22)),
+                const Text('Placer Absoluto',
+                    style: TextStyle(
+                        fontSize: 10,
+                        color: CavaColors.muted,
+                        letterSpacing: 1)),
               ]),
             ),
             SizedBox(
@@ -45,7 +58,8 @@ class CavaAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: Stack(clipBehavior: Clip.none, children: [
                 IconButton(
                   onPressed: onCarritoTap,
-                  icon: const Icon(Icons.shopping_bag_outlined, color: CavaColors.ink),
+                  icon: const Icon(Icons.shopping_bag_outlined,
+                      color: CavaColors.ink),
                 ),
                 if (contadorCarrito > 0)
                   Positioned(
@@ -53,9 +67,16 @@ class CavaAppBar extends StatelessWidget implements PreferredSizeWidget {
                     top: 2,
                     child: Container(
                       padding: const EdgeInsets.all(3),
-                      decoration: const BoxDecoration(color: CavaColors.wine, shape: BoxShape.circle),
-                      constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
-                      child: Text('$contadorCarrito', textAlign: TextAlign.center, style: const TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.w700)),
+                      decoration: const BoxDecoration(
+                          color: CavaColors.wine, shape: BoxShape.circle),
+                      constraints:
+                          const BoxConstraints(minWidth: 16, minHeight: 16),
+                      child: Text('$contadorCarrito',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 9,
+                              fontWeight: FontWeight.w700)),
                     ),
                   ),
               ]),

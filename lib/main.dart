@@ -6,6 +6,7 @@ import 'screens/productos_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/perfil_screen.dart';
 import 'core/cava_app_bar.dart';
+import 'core/cava_theme.dart';
 
 void main() {
   runApp(const CavaApp());
@@ -47,14 +48,17 @@ class _RaizAppState extends State<RaizApp> {
     ];
 
     return Scaffold(
-      appBar: const CavaAppBar(), // contadorCarrito se conecta cuando exista el Carrito
+      appBar:
+          const CavaAppBar(), // contadorCarrito se conecta cuando exista el Carrito
       body: IndexedStack(index: _indice, children: paginas),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _indice,
         onDestinationSelected: (i) => setState(() => _indice = i),
         destinations: [
-          const NavigationDestination(icon: Icon(Icons.home_outlined), label: 'Inicio'),
-          const NavigationDestination(icon: Icon(Icons.storefront_outlined), label: 'Productos'),
+          const NavigationDestination(
+              icon: Icon(Icons.home_outlined), label: 'Inicio'),
+          const NavigationDestination(
+              icon: Icon(Icons.storefront_outlined), label: 'Productos'),
           NavigationDestination(
             icon: Icon(session.logueado ? Icons.person : Icons.login),
             label: session.logueado ? 'Perfil' : 'Ingresar',

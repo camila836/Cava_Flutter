@@ -103,7 +103,8 @@ class ApiClient {
       if (q != null && q.isNotEmpty) 'q': q,
       if (categoria != null && categoria.isNotEmpty) 'categoria': categoria,
     };
-    final uri = Uri.parse('$baseUrl/productos').replace(queryParameters: params);
+    final uri =
+        Uri.parse('$baseUrl/productos').replace(queryParameters: params);
     final r = await http.get(uri, headers: _headers());
     return _parse(r);
   }

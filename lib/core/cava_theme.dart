@@ -13,7 +13,8 @@ abstract final class CavaColors {
   static const ink = Color(0xFF241B14); // texto principal casi negro
   static const forest = Color(0xFF1F3D2E); // verde bosque (botones/acentos)
   static const wine = Color(0xFF6E1423); // vino/maroon (botones/acentos)
-  static const blush = Color(0xFFF3E2DD); // franja rosada clara (sección anchetas)
+  static const blush =
+      Color(0xFFF3E2DD); // franja rosada clara (sección anchetas)
   static const divider = Color(0xFFD9C7A8);
 }
 
@@ -32,10 +33,18 @@ ThemeData cavaTheme() {
     ),
     scaffoldBackgroundColor: CavaColors.cream,
     textTheme: const TextTheme(
-      displaySmall: TextStyle(fontFamily: 'serif', fontSize: 34, height: 1.15, color: Colors.white, fontWeight: FontWeight.w500),
-      headlineMedium: TextStyle(fontFamily: 'serif', fontSize: 28, color: CavaColors.ink),
-      titleLarge: TextStyle(fontFamily: 'serif', fontSize: 22, color: CavaColors.ink),
-      titleMedium: TextStyle(fontWeight: FontWeight.w600, color: CavaColors.ink),
+      displaySmall: TextStyle(
+          fontFamily: 'serif',
+          fontSize: 34,
+          height: 1.15,
+          color: Colors.white,
+          fontWeight: FontWeight.w500),
+      headlineMedium:
+          TextStyle(fontFamily: 'serif', fontSize: 28, color: CavaColors.ink),
+      titleLarge:
+          TextStyle(fontFamily: 'serif', fontSize: 22, color: CavaColors.ink),
+      titleMedium:
+          TextStyle(fontWeight: FontWeight.w600, color: CavaColors.ink),
       bodyMedium: TextStyle(height: 1.5, color: CavaColors.muted),
       labelLarge: TextStyle(fontWeight: FontWeight.w700, letterSpacing: 1.3),
     ),
@@ -44,7 +53,11 @@ ThemeData cavaTheme() {
       backgroundColor: CavaColors.cream,
       foregroundColor: CavaColors.ink,
       surfaceTintColor: Colors.transparent,
-      titleTextStyle: TextStyle(fontFamily: 'serif', fontSize: 21, letterSpacing: 3, color: CavaColors.ink),
+      titleTextStyle: TextStyle(
+          fontFamily: 'serif',
+          fontSize: 21,
+          letterSpacing: 3,
+          color: CavaColors.ink),
     ),
     inputDecorationTheme: const InputDecorationTheme(
       filled: true,
@@ -63,7 +76,8 @@ ThemeData cavaTheme() {
         foregroundColor: Colors.white,
         minimumSize: const Size.fromHeight(52),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        textStyle: const TextStyle(fontWeight: FontWeight.w700, letterSpacing: 1.3),
+        textStyle:
+            const TextStyle(fontWeight: FontWeight.w700, letterSpacing: 1.3),
       ),
     ),
     cardTheme: CardThemeData(
@@ -88,15 +102,23 @@ class CavaEyebrow extends StatelessWidget {
   final Color color;
   @override
   Widget build(BuildContext context) => Text(
-    text.toUpperCase(),
-    style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 2),
-  );
+        text.toUpperCase(),
+        style: TextStyle(
+            color: color,
+            fontSize: 10,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 2),
+      );
 }
 
 /// Título tipo "Hechos para disfrutar *despacio*" con la última palabra en
 /// cursiva y color de acento, como en el sitio web.
 class CavaTituloAcento extends StatelessWidget {
-  const CavaTituloAcento(this.texto, this.acento, {super.key, this.color = CavaColors.ink, this.acentoColor = CavaColors.wine, this.textAlign = TextAlign.start});
+  const CavaTituloAcento(this.texto, this.acento,
+      {super.key,
+      this.color = CavaColors.ink,
+      this.acentoColor = CavaColors.wine,
+      this.textAlign = TextAlign.start});
   final String texto;
   final String acento;
   final Color color;
@@ -104,15 +126,19 @@ class CavaTituloAcento extends StatelessWidget {
   final TextAlign textAlign;
   @override
   Widget build(BuildContext context) => RichText(
-    textAlign: textAlign,
-    text: TextSpan(
-      style: TextStyle(fontFamily: 'serif', fontSize: 24, color: color, height: 1.25),
-      children: [
-        TextSpan(text: '$texto '),
-        TextSpan(text: acento, style: TextStyle(fontStyle: FontStyle.italic, color: acentoColor)),
-      ],
-    ),
-  );
+        textAlign: textAlign,
+        text: TextSpan(
+          style: TextStyle(
+              fontFamily: 'serif', fontSize: 24, color: color, height: 1.25),
+          children: [
+            TextSpan(text: '$texto '),
+            TextSpan(
+                text: acento,
+                style:
+                    TextStyle(fontStyle: FontStyle.italic, color: acentoColor)),
+          ],
+        ),
+      );
 }
 
 /// Pequeña línea dorada centrada, usada como separador decorativo.
@@ -120,5 +146,6 @@ class CavaLineaDorada extends StatelessWidget {
   const CavaLineaDorada({super.key, this.width = 46});
   final double width;
   @override
-  Widget build(BuildContext context) => Container(height: 2, width: width, color: CavaColors.gold);
+  Widget build(BuildContext context) =>
+      Container(height: 2, width: width, color: CavaColors.gold);
 }
