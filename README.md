@@ -1,2 +1,2 @@
-# cava_mobile
+# cava_flutter
 flutter
